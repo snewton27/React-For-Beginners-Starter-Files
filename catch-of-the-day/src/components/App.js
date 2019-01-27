@@ -45,12 +45,28 @@ class App extends React.Component {
     })
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    console.log('Component Mounted');
     const { params } = this.props.match;
-    this.ref = base.syncState(`${params.storeid}/fishes`, {
+
+    this.ref = await base.syncState(`${params.storeid}/fishes`, {
       context: this,
       state: 'fishes'
     });
+
+    // Reinstate order in local storage on refresh
+    console.log('Getting Local Storage Order');
+    const localStorageRef = localStorage.getItem(`order-${params.storeid}`);
+    if (localStorageRef) {
+      console.log('Setting Order in Local Storage during mount');
+      this.setState({ order: JSON.parse(localStorageRef)});
+    }
+  };
+
+  componentDidUpdate() {
+    console.log('Component Updating');
+    const { params } = this.props.match;
+    localStorage.setItem(`order-${params.storeid}`, JSON.stringify(this.state.order));
   };
 
   componentWillUnmount() {
