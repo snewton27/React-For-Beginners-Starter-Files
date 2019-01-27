@@ -22,7 +22,7 @@ class Order extends React.Component {
           {formatPrice(count * fish.price)}
         </li>
       );
-    }
+    };
 
     render() {
         const orderIds = Object.keys(this.props.order);
