@@ -26,6 +26,19 @@ class App extends React.Component {
     });
   };
 
+  updateFish = (key, updatedFish) => {
+    // Take a copy of current state
+    const fishes = { ...this.state.fishes };
+
+    // Modify copy of fishes
+    fishes[key] = updatedFish;
+
+    // Set state to be our modified copy
+    this.setState({
+      fishes
+    });
+  };
+
   addFishToOrder = key => {
     // 1. Make copy of existing state
     const order = { ...this.state.order };
@@ -46,7 +59,6 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    console.log('Component Mounted');
     const { params } = this.props.match;
 
     this.ref = await base.syncState(`${params.storeid}/fishes`, {
@@ -55,16 +67,13 @@ class App extends React.Component {
     });
 
     // Reinstate order in local storage on refresh
-    console.log('Getting Local Storage Order');
     const localStorageRef = localStorage.getItem(`order-${params.storeid}`);
     if (localStorageRef) {
-      console.log('Setting Order in Local Storage during mount');
       this.setState({ order: JSON.parse(localStorageRef)});
     }
   };
 
   componentDidUpdate() {
-    console.log('Component Updating');
     const { params } = this.props.match;
     localStorage.setItem(`order-${params.storeid}`, JSON.stringify(this.state.order));
   };
@@ -87,7 +96,7 @@ class App extends React.Component {
               </ul>
             </div>
               <Order order={this.state.order} fishes={this.state.fishes}/>
-              <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes}/>
+              <Inventory addFish={this.addFish} updateFish={this.updateFish} fishes={this.state.fishes} loadSampleFishes={this.loadSampleFishes}/>
           </div>
         );
     };
