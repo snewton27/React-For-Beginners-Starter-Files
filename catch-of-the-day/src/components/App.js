@@ -39,6 +39,16 @@ class App extends React.Component {
     });
   };
 
+  deleteFish = (key) => {
+    const fishes = { ...this.state.fishes };
+
+    fishes[key] = null;
+
+    this.setState({
+      fishes
+    });
+  }
+
   addFishToOrder = key => {
     // 1. Make copy of existing state
     const order = { ...this.state.order };
@@ -47,6 +57,16 @@ class App extends React.Component {
     order[key] = order[key] + 1 || 1;
 
     // 3. Overwrite original state with new state
+    this.setState({
+      order
+    });
+  };
+
+  deleteFishFromOrder = (key) => {
+    const order = { ...this.state.order };
+
+    delete order[key];
+
     this.setState({
       order
     });
@@ -95,8 +115,8 @@ class App extends React.Component {
                 })}
               </ul>
             </div>
-              <Order order={this.state.order} fishes={this.state.fishes}/>
-              <Inventory addFish={this.addFish} updateFish={this.updateFish} fishes={this.state.fishes} loadSampleFishes={this.loadSampleFishes}/>
+              <Order deleteFishFromOrder={this.deleteFishFromOrder} order={this.state.order} fishes={this.state.fishes}/>
+              <Inventory addFish={this.addFish} updateFish={this.updateFish} deleteFish={this.deleteFish} fishes={this.state.fishes} loadSampleFishes={this.loadSampleFishes}/>
           </div>
         );
     };
