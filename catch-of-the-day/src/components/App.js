@@ -81,13 +81,13 @@ class App extends React.Component {
   async componentDidMount() {
     const { params } = this.props.match;
 
-    this.ref = await base.syncState(`${params.storeid}/fishes`, {
+    this.ref = await base.syncState(`${params.storeId}/fishes`, {
       context: this,
       state: 'fishes'
     });
 
     // Reinstate order in local storage on refresh
-    const localStorageRef = localStorage.getItem(`order-${params.storeid}`);
+    const localStorageRef = localStorage.getItem(`order-${params.storeId}`);
     if (localStorageRef) {
       this.setState({ order: JSON.parse(localStorageRef)});
     }
@@ -95,7 +95,7 @@ class App extends React.Component {
 
   componentDidUpdate() {
     const { params } = this.props.match;
-    localStorage.setItem(`order-${params.storeid}`, JSON.stringify(this.state.order));
+    localStorage.setItem(`order-${params.storeId}`, JSON.stringify(this.state.order));
   };
 
   componentWillUnmount() {
@@ -116,8 +116,14 @@ class App extends React.Component {
               </ul>
             </div>
               <Order deleteFishFromOrder={this.deleteFishFromOrder} order={this.state.order} fishes={this.state.fishes}/>
-              <Inventory addFish={this.addFish} updateFish={this.updateFish} deleteFish={this.deleteFish} fishes={this.state.fishes} loadSampleFishes={this.loadSampleFishes}/>
-          </div>
+              <Inventory
+                  addFish={this.addFish}
+                  updateFish={this.updateFish}
+                  deleteFish={this.deleteFish}
+                  fishes={this.state.fishes}
+                  loadSampleFishes={this.loadSampleFishes}
+                  storeId={this.props.match.params.storeId}/>
+              </div>
         );
     };
 }
